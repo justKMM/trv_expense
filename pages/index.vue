@@ -1,55 +1,79 @@
 <template>
-    <div>
-        <div class="surface-0 flex justify-content-center">
-        <div id="home" class="landing-wrapper overflow-hidden">
-            <div class="py-4 px-4 mx-0 md:mx-6 lg:mx-8 lg:px-8 flex align-items-center justify-content-between relative lg:static mb-3">
-                <!--<a class="flex align-items-center" href="#"> <img :src="" alt="Sakai Logo" height="50" class="mr-0 lg:mr-2" /><span class="text-900 font-medium text-2xl line-height-3 mr-8">SAKAI</span> </a>-->
-                <a class="cursor-pointer block lg:hidden text-700 p-ripple" v-ripple v-styleclass="{ selector: '@next', enterClass: 'hidden', leaveToClass: 'hidden', hideOnOutsideClick: true }">
-                    <i class="pi pi-bars text-4xl"></i>
-                </a>
-                <div class="align-items-center surface-0 flex-grow-1 justify-content-between hidden lg:flex absolute lg:static w-full left-0 px-6 lg:px-0 z-2" style="top: 120px">
-                    <ul class="list-none p-0 m-0 flex lg:align-items-center select-none flex-column lg:flex-row cursor-pointer">
-                        <li>
-                            <a @click="smoothScroll('#hero')" class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3 p-ripple" v-ripple>
-                                <span>Home</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a @click="smoothScroll('#features')" class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3 p-ripple" v-ripple>
-                                <span>Features</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a @click="smoothScroll('#highlights')" class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3 p-ripple" v-ripple>
-                                <span>Highlights</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a @click="smoothScroll('#pricing')" class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3 p-ripple" v-ripple>
-                                <span>Pricing</span>
-                            </a>
-                        </li>
-                    </ul>
-                    <div class="flex justify-content-between lg:block border-top-1 lg:border-top-none surface-border py-3 lg:py-0 mt-3 lg:mt-0">
-                        <Button label="Login" class="p-button-text p-button-rounded border-none font-light line-height-2 text-blue-500"></Button>
-                        <Button label="Register" class="p-button-rounded border-none ml-5 font-light text-white line-height-2 bg-blue-500"></Button>
+    <div class="surface-0 flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
+        <div class="grid justify-content-center p-2 lg:p-0 min-width-80 bg-gradient-to-br from-sky-500 to-indigo-500">
+            <div class="mt-5 xl:mt-0 flex justify-center justify-between text-center p-8">
+                <img src="../assets/imgs/HRCG22_weiss-300x269.png" alt="HRCG" class="mb-5 logo"/>
+            </div>
+
+            <div class="h-full w-full">
+                <div class="text-center mb-5 text-white">
+                    <div class="text-900 text-8xl font-bold mb-3">
+                        Welcome,
                     </div>
+
+                    <span class="text-600 font-medium text-3xl">
+                        Sign in to continue
+                    </span>
                 </div>
             </div>
+
         </div>
+        <div class="relative flex items-center justify-center bg-blue-300 min-h-screen w-full">
+            <div class="static grid grid-cols-1">       
+                <div class="static bg-white p-3 rounded-lg shadow-lg max-w-80">
+                    <button class="button"><Icon name="logos:zoho"></Icon> Login with Zoho</button>
+                </div>
+                
+            </div>
         </div>
     </div>
-</template>
 
-<script lang="ts" setup>
-    const smoothScroll = (id: any) => {
-        document.querySelector(id).scrollIntoView({
-            behavior: 'smooth'
-    });
-};
+    
+  </template>
+  
+  <script>
+ 
+ 
+  </script>
+  
+  <style lang="scss">
+    .button {
+        background-color: white; 
+        color: black; 
+        border: 2px solid #008CBA;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        transition-duration: 0.4s;
+        padding: 8px 16px;
+        text-align: center;
+        text-decoration: none;
+        cursor: pointer;
+        border-radius: 8px;
+    }
 
-</script>
+    .button:hover {
+        background-color: #008CBA;
+        color: white;
+    }
 
-<style>
-
-</style>
+    .min-width-80 {
+      min-width: 80%;
+    }
+  
+    .logo {
+      width: 81px;
+      height:81px;
+    }
+  
+    .gradient-border-top {
+      border-radius:56px;
+      padding:0.3rem;
+      background: linear-gradient(180deg, var(--primary-color), rgba(33, 150, 243, 0) 30%);
+    }
+  
+    .gradient-border-bot {
+      border-radius: 53px;
+      background: linear-gradient(180deg, var(--surface-50) 38.9%, var(--surface-0));
+    }
+  </style>

@@ -5,5 +5,12 @@ export default defineAppConfig({
       colors: {
         primary: '#ff0000'
       }
+    },
+    nuxtIcon: {
+      size: '32px', // default <Icon> size applied
+      class: 'icon', // default <Icon> class applied
+      aliases: {
+        'nuxt': 'logos:nuxt-icon',
+      }
     }
   })

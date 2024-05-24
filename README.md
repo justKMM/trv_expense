@@ -73,3 +73,6 @@ bun run preview
 ```
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+
+# To be watched guides
+Sidebar & Topbar: https://www.youtube.com/watch?v=7z8jkY9Aftk

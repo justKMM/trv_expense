@@ -1,8 +1,18 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   modules: [
-    'nuxt-primevue'
+    'nuxt-primevue',
+    'nuxt-icon'
   ],
-  css: ['primevue/resources/themes/aura-light-green/theme.css'],
-  devtools: { enabled: true }
+  devtools: { enabled: true },
+  // tailwindcss
+  css: [
+    '~/assets/css/main.css'
+  ],
+  postcss: {
+    plugins: {
+      tailwindcss: {},
+      autoprefixer: {},
+    },
+  },
 })
