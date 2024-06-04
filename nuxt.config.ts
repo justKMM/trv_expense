@@ -12,11 +12,12 @@ export default defineNuxtConfig({
   postcss: {
     plugins: {
       tailwindcss: {},
-      autoprefixer: {},
+      autoprefixer: {}
     },
   },
   // primevue
   primevue: {
+    usePrimeVue: true,
     options: {
       unstyled: true
     },

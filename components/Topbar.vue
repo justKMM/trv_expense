@@ -25,18 +25,15 @@
           label: 'Options',
           items: [
               {
-                  label: 'Refresh',
-                  icon: 'pi pi-refresh'
+                  label: 'Logout',
+                  icon: 'pi pi-times',
+                  shortcut: 'F5'
               },
-              {
-                  label: 'Export',
-                  icon: 'pi pi-upload'
-              }
           ]
       }
   ]);
 
-  const toggle = (event) => {
+  const toggle = (event: any) => {
       menu.value.toggle(event);
   };
 
