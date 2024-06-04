@@ -21,7 +21,7 @@
         <div class="relative flex items-center justify-center bg-blue-300 min-h-screen w-full">
             <div class="static grid grid-cols-1">       
                 <div class="static bg-white p-3 rounded-lg shadow-lg max-w-80">
-                    <button class="button"><Icon name="logos:zoho"></Icon> Login with Zoho</button>
+                    <NuxtLink class="button" to="dashboard"><Icon name="logos:zoho"></Icon> Login with Zoho</NuxtLink>
                 </div>
                 
             </div>
@@ -31,9 +31,10 @@
     
   </template>
   
-  <script>
- 
- 
+  <script setup lang="ts">
+    definePageMeta ({
+        layout: false
+    });
   </script>
   
   <style lang="scss">

@@ -15,4 +15,11 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
+  // primevue
+  primevue: {
+    options: {
+      unstyled: true
+    },
+    importPT: { as: 'Aura', from: '~/presets/aura' }     //import and apply preset   
+}
 })
