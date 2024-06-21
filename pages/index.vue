@@ -27,54 +27,17 @@
             </div>
         </div>
     </div>
+</template>
 
-    
-  </template>
-  
-  <script setup lang="ts">
+<script lang="ts" setup>
     definePageMeta ({
         layout: false
     });
-  </script>
-  
-  <style lang="scss">
-    .button {
-        background-color: white; 
-        color: black; 
-        border: 2px solid #008CBA;
-        display: inline-block;
-        font-size: 16px;
-        margin: 4px 2px;
-        transition-duration: 0.4s;
-        padding: 8px 16px;
-        text-align: center;
-        text-decoration: none;
-        cursor: pointer;
-        border-radius: 8px;
-    }
+</script>
 
-    .button:hover {
-        background-color: #008CBA;
-        color: white;
-    }
+<style>
 
-    .min-width-80 {
-      min-width: 80%;
-    }
+</style>
   
-    .logo {
-      width: 81px;
-      height:81px;
-    }
-  
-    .gradient-border-top {
-      border-radius:56px;
-      padding:0.3rem;
-      background: linear-gradient(180deg, var(--primary-color), rgba(33, 150, 243, 0) 30%);
-    }
-  
-    .gradient-border-bot {
-      border-radius: 53px;
-      background: linear-gradient(180deg, var(--surface-50) 38.9%, var(--surface-0));
-    }
-  </style>
+
+ 

@@ -1,15 +1,16 @@
 <template>
   <div class="w-full h-full flex">
-    <Sidebar />
+    <Sidenav :currentUser="currentUser" :visibleSidenav="visibleSidenav"/>
     <div class="w-full h-full">
-      <Topbar />
+      <Topnav :currentUser="currentUser" :visibleSidenav="visibleSidenav"/>
       <slot />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-
+  const currentUser = "Khai Minh Mai";
+  const visibleSidenav = false;
 </script>
 
 <style>

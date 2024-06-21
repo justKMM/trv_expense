@@ -8,3 +8,62 @@
       font-family: "Proxima Nova", system-ui, sans-serif;
     }
 }
+
+@layer utilities {
+  .button {
+    background-color: white; 
+    color: black; 
+    border: 2px solid #008CBA;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    transition-duration: 0.4s;
+    transition: ease-out;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 8px;
+  }
+
+  .button:hover {
+      background-color: #008CBA;
+      color: white;
+  }
+
+  .button:active {
+    background-color: #013c50;
+  }
+
+  .button-cancel {
+    background-color: red; 
+    color: white; 
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    transition-duration: 0.4s;
+    transition: ease-out;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 8px;
+  }
+
+  .button-cancel:hover {
+    background-color: rgb(167, 3, 3);
+  }
+
+  .button-cancel:active {
+    background-color: rgb(94, 2, 2);
+  }
+
+  .min-width-80 {
+    min-width: 80%;
+  }
+
+  .logo {
+    width: 81px;
+    height:81px;
+  }
+}
