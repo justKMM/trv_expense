@@ -22,5 +22,16 @@ export default defineNuxtConfig({
       unstyled: true
     },
     importPT: { as: 'Aura', from: '~/presets/aura' }     //import and apply preset   
-}
+  },
+  runtimeConfig: {
+    public: {
+      // Public runtime config (client-side)
+      clientId: process.env.ZOHO_CLIENT_ID,
+      redirectUri: process.env.ZOHO_REDIRECT_URI
+    },
+    private: {
+      // Private runtime config (server-side)
+      clientSecret: process.env.ZOHO_CLIENT_SECRET
+    }
+  }
 })

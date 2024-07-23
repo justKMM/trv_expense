@@ -17,8 +17,8 @@
     display: inline-block;
     font-size: 16px;
     margin: 4px 2px;
-    transition-duration: 0.4s;
-    transition: ease-out;
+    transition-duration: 0.8s;
+    transition: ease-in-out;
     padding: 8px 16px;
     text-align: center;
     text-decoration: none;

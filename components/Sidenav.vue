@@ -21,5 +21,5 @@
 </template>
 
 <script setup>
-  const currentUser = ref($store)
+  
 </script>
