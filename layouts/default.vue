@@ -1,16 +1,20 @@
 <template>
   <div class="w-full h-full flex">
-    <Sidenav :currentUser="currentUser" :visibleSidenav="visibleSidenav"/>
+    <Sidenav/>
     <div class="w-full h-full">
-      <Topnav :currentUser="currentUser" :visibleSidenav="visibleSidenav"/>
-      <slot />
+      <Topnav/>
+      <div class="m-5">
+        <slot />
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { sidebarVisibilityChanger } from '~/composables/states';
+
   const currentUser = "Khai Minh Mai";
-  const visibleSidenav = false;
+  const sidebarVisibility = sidebarVisibilityChanger();
 </script>
 
 <style>

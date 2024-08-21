@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen w-[300px] bg-gray-800 shadow-lg rounded-r-lg">
+  <div v-if="sidebarVisibility" class="h-screen w-[300px] bg-gray-800 shadow-lg rounded-r-lg">
       <div class="bg-gray-700 h-[50px] rounded-r-lg">
           <div class="h-full flex text-xl font-bold text-center justify-center text-white">Profile</div>
       </div>
@@ -21,5 +21,5 @@
 </template>
 
 <script setup>
-  
+  const sidebarVisibility = sidebarVisibilityChanger();
 </script>
