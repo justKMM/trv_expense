@@ -176,7 +176,7 @@
                   mode="decimal"
                   :minFractionDigits="2"
                   :maxFractionDigits="2"
-                  class="w-32"
+                  class=""
                 />
                 <Button
                   icon="pi pi-trash"
