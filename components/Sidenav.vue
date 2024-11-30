@@ -1,25 +1,41 @@
 <template>
-  <div v-if="sidebarVisibility" class="h-screen w-[300px] bg-gray-800 shadow-lg rounded-r-lg">
-      <div class="bg-gray-700 h-[50px] rounded-r-lg">
-          <div class="h-full flex text-xl font-bold text-center justify-center text-white">Profile</div>
+  <div
+    v-if="sidebarVisibility"
+    class="h-screen w-[300px] bg-gray-800 shadow-lg rounded-r-lg transition-transform duration-300 ease-in-out"
+    :class="{ 'translate-x-0': sidebarVisibility, '-translate-x-full': !sidebarVisibility }"
+  >
+    <div class="bg-gray-700 h-[50px] rounded-r-lg">
+      <div class="h-full flex text-xl font-bold text-center justify-center text-white">
+        <NuxtLink to="/dashboard">Profile</NuxtLink>
       </div>
-
-      <div class="flex flex-col justify-between h-[calc(100vh-3rem)] bg-gray-900">
-        <div class="menu-man text-left px-2 whitespace-nowrap">
-          <div class="profile flex justify-center items-center text-center p-5">
-            <div class="text-center text-white">
-              <h5 class="text-xl font-medium leading-tight mb-2">
-                <!-- {{ currentUser }} -->
-              </h5>
-              <NuxtLink to="">Link 1</NuxtLink>
-            </div>
+    </div>
+    <div class="flex flex-col justify-between h-[calc(100vh-3rem)] bg-gray-900">
+      <div class="menu-man text-left px-2 whitespace-nowrap">
+        <div class="profile flex flex-col justify-center items-center text-center p-5">
+          <div class="text-center text-white">
+            <h5 class="text-xl font-medium leading-tight mb-2">
+              <!-- {{ currentUser }} -->
+            </h5>
+            <NuxtLink
+              to="/forms/travel_expense.vue"
+              class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 mx-3 border-b-4 border-blue-700 hover:border-blue-500 rounded"
+            >
+              Travel Expense Form
+            </NuxtLink>
+            <NuxtLink
+              to=""
+              class="block w-full py-2 px-4 rounded-md hover:bg-gray-700 transition duration-200"
+            >
+              Account
+            </NuxtLink>
           </div>
-
         </div>
       </div>
+    </div>
   </div>
 </template>
-
 <script setup>
-  const sidebarVisibility = sidebarVisibilityChanger();
+import { sidebarVisibilityChanger } from '~/composables/states';
+
+const sidebarVisibility = sidebarVisibilityChanger();
 </script>

@@ -8,10 +8,10 @@ export const useZohoAuth = () => {
       redirect_uri: config.public.redirectUri,
       scope: 'AaaServer.profile.READ',
       prompt: 'consent',
-      //access_type: 'offline'
+      access_type: 'offline'
     });
   
-    window.location.href = `https://accounts.zoho.com/oauth/v2/auth?${params.toString()}`
+    window.location.href = `https://accounts.zoho.eu/oauth/v2/auth?${params.toString()}`
   };
 
   // Handle OAuth callback

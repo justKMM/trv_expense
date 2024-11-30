@@ -3,7 +3,7 @@ import type { ZohoTokens, ZohoUser, ZohoAuthResponse } from '~/types/zoho'
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
-  const body = await readBody(event)
+  const response_body = await readBody(event)
 
   try {
     // Log the parameters
@@ -12,13 +12,11 @@ export default defineEventHandler(async (event) => {
       client_id: config.public.clientId,
       client_secret: config.private.clientSecret,
       redirect_uri: config.public.redirectUri,
-      code: body.code
+      code: response_body.code
     })
 
-    console.log('Sending token request with params:', params.toString())
-
     // Validation
-    if (!body.code) {
+    if (!response_body.code) {
       throw createError({
         statusCode: 400,
         message: 'Authorization code is required'
@@ -33,7 +31,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Step 1: Get Token
-    const tokenResponse = await $fetch<ZohoTokens>('https://accounts.zoho.com/oauth/v2/token', {
+    const tokenResponse = await $fetch<ZohoTokens>('https://accounts.zoho.eu/oauth/v2/token', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
@@ -42,9 +40,8 @@ export default defineEventHandler(async (event) => {
     })
 
     console.log('Token response:', {
-      //hasAccessToken: !!tokenResponse.access_token,
-      //tokenType: tokenResponse.token_type
-      tokenResponse
+      hasAccessToken: !!tokenResponse.access_token,
+      tokenType: tokenResponse.token_type
     })
 
     if (!tokenResponse?.access_token) {
@@ -52,19 +49,14 @@ export default defineEventHandler(async (event) => {
         statusCode: 400,
         message: 'No access token in response'
       })
-    }
+    } 
 
     // Step 2: Get User Info
     console.log('Fetching user info...')
-    const userInfo = await $fetch<ZohoUser>('https://accounts.zoho.com/oauth/user/info', {
+    const userInfo = await $fetch<ZohoUser>('https://accounts.zoho.eu/oauth/user/info', {
       headers: {
         'Authorization': `${tokenResponse.token_type} ${tokenResponse.access_token}`
       }
-    })
-
-    console.log('User info received:', {
-      hasEmail: !!userInfo.Email,
-      hasZUID: !!userInfo.ZUID
     })
 
     return {
