@@ -1,9 +1,7 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
+import { defineNuxtConfig } from 'nuxt/config'
+
 export default defineNuxtConfig({
-  modules: [
-    'nuxt-primevue',
-    'nuxt-icon'
-  ],
+  modules: ['nuxt-primevue', 'nuxt-icon', '@pinia/nuxt'],
   devtools: { enabled: true },
   // tailwindcss
   css: [
@@ -21,17 +19,17 @@ export default defineNuxtConfig({
     options: {
       unstyled: true
     },
-    importPT: { as: 'Aura', from: '~/presets/aura' }     //import and apply preset   
+    importPT: { as: 'Aura', from: '~/presets/aura' }
   },
   runtimeConfig: {
     public: {
       // Public runtime config (client-side)
-      clientId: process.env.ZOHO_CLIENT_ID,
-      redirectUri: process.env.ZOHO_REDIRECT_URI
+      clientId: process.env.NUXT_PUBLIC_CLIENT_ID,
+      redirectUri: process.env.NUXT_PUBLIC_REDIRECT_URI
     },
     private: {
       // Private runtime config (server-side)
-      clientSecret: process.env.ZOHO_CLIENT_SECRET
+      clientSecret: process.env.NUXT_ZOHO_CLIENT_SECRET
     }
   }
 })
