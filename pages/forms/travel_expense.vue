@@ -223,14 +223,11 @@
 
 <script lang="ts" setup>
 import { ref, computed } from 'vue';
-
 definePageMeta({
   middleware: ['auth']
 });
 
 const { user } = useUser();
-
-// Mock user info - replace with actual user data
 const userInfo = ref({
   firstName: user.value?.First_Name,
   lastName: user.value?.Last_Name,
@@ -359,7 +356,7 @@ const removeExtraCost = (index: number) => {
 // Form submission
 const submitForm = async () => {
   try {
-    // Add your form submission logic here
+    // Add form submission logic here
     console.log('Form submitted:', form.value);
   } catch (error) {
     console.error('Error submitting form:', error);
