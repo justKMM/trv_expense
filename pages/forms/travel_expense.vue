@@ -9,12 +9,24 @@
           <!-- Personal Information Section -->
           <Panel header="Personal Information" class="mb-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <!-- Name -->
+              <!-- First Name -->
               <div>
-                <label for="name" class="block text-sm font-medium text-gray-600">Name</label>
+                <label for="firstName" class="block text-sm font-medium text-gray-600">First Name</label>
                 <InputText
-                  id="name"
-                  v-model="userInfo.name"
+                  id="firstName"
+                  v-model="userInfo.firstName"
+                  disabled
+                  class="w-full mt-1 text-gray-700 bg-gray-100"
+                  aria-disabled="true"
+                />
+              </div>
+
+              <!-- Last Name -->
+              <div>
+                <label for="lastName" class="block text-sm font-medium text-gray-600">Last Name</label>
+                <InputText
+                  id="lastName"
+                  v-model="userInfo.lastName"
                   disabled
                   class="w-full mt-1 text-gray-700 bg-gray-100"
                   aria-disabled="true"
@@ -33,6 +45,30 @@
                 />
               </div>
 
+              <!-- Phone with Country Code -->
+              <div>
+                <label for="phone" class="block text-sm font-medium text-gray-600">Phone Number</label>
+                <div class="flex gap-2">
+                  <Dropdown
+                    v-model="form.phoneCountry"
+                    :options="phoneCountries"
+                    optionLabel="label"
+                    class="w-36"
+                    placeholder="Code"
+                    :class="{ 'p-invalid': errors.phoneCountry }"
+                  />
+                  <InputMask
+                    id="phone"
+                    v-model="form.phone"
+                    class="flex-1"
+                    mask="*** **** ****"
+                    :class="{ 'p-invalid': errors.phone }"
+                    aria-describedby="phone-help"
+                  />
+                </div>
+                <small id="phone-help" v-if="errors.phone" class="p-error">{{ errors.phone }}</small>
+              </div>
+
               <!-- IBAN -->
               <div class="col-span-2">
                 <label for="iban" class="block text-sm font-medium text-gray-600">IBAN</label>
@@ -47,56 +83,63 @@
                 <small id="iban-help" v-if="errors.iban" class="p-error">{{ errors.iban }}</small>
               </div>
 
-              <!-- Address -->
+              <!-- Address (single line) -->
               <div class="col-span-2">
                 <label for="address" class="block text-sm font-medium text-gray-600">Postal Address</label>
-                <Textarea
+                <InputText
                   id="address"
                   v-model="form.address"
-                  rows="3"
                   class="w-full mt-1"
                   :class="{ 'p-invalid': errors.address }"
                   aria-describedby="address-help"
                 />
                 <small id="address-help" v-if="errors.address" class="p-error">{{ errors.address }}</small>
               </div>
-
-              <!-- Phone -->
-              <div>
-                <label for="phone" class="block text-sm font-medium text-gray-600">Phone Number</label>
-                <InputMask
-                  id="phone"
-                  v-model="form.phone"
-                  mask="(999) 999-9999"
-                  class="w-full mt-1"
-                  :class="{ 'p-invalid': errors.phone }"
-                  aria-describedby="phone-help"
-                />
-                <small id="phone-help" v-if="errors.phone" class="p-error">{{ errors.phone }}</small>
-              </div>
             </div>
           </Panel>
 
           <!-- Expense Details Section -->
           <Panel header="Expense Details" class="mb-6">
+            <!-- Transport Type Selection -->
+            <div class="mb-6">
+              <label class="block text-sm font-medium text-gray-600 mb-2">Transport Type</label>
+              <div class="flex gap-4">
+                <div v-for="type in transportTypes" :key="type.value" class="flex items-center">
+                  <RadioButton
+                    :id="type.value"
+                    v-model="form.transportType"
+                    :value="type.value"
+                    :name="type.value"
+                  />
+                  <label :for="type.value" class="ml-2">{{ type.label }}</label>
+                </div>
+              </div>
+            </div>
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <!-- Travel Cost -->
+              <!-- Dynamic Transport Cost Field -->
               <div>
-                <label for="travelCost" class="block text-sm font-medium text-gray-600">Travel Cost</label>
+                <label :for="transportCostField.id" class="block text-sm font-medium text-gray-600">
+                  {{ transportCostField.label }}
+                </label>
                 <span class="p-input-icon-left w-full">
                   <i class="pi pi-euro text-gray-600"></i>
                   <InputNumber
-                    id="travelCost"
-                    v-model="form.travelCost"
+                    :id="transportCostField.id"
+                    v-model="form[transportCostField.model]"
                     mode="decimal"
                     :minFractionDigits="2"
                     :maxFractionDigits="2"
                     class="w-full mt-1"
-                    :class="{ 'p-invalid': errors.travelCost }"
-                    aria-describedby="travelCost-help"
+                    :class="{ 'p-invalid': errors[transportCostField.model] }"
+                    :aria-describedby="`${transportCostField.model}-help`"
                   />
                 </span>
-                <small id="travelCost-help" v-if="errors.travelCost" class="p-error">{{ errors.travelCost }}</small>
+                <small 
+                  :id="`${transportCostField.model}-help`" 
+                  v-if="errors[transportCostField.model]" 
+                  class="p-error"
+                >{{ errors[transportCostField.model] }}</small>
               </div>
 
               <!-- Hotel Cost -->
@@ -185,36 +228,103 @@ definePageMeta({
   middleware: ['auth']
 });
 
+const { user } = useUser();
+
 // Mock user info - replace with actual user data
 const userInfo = ref({
-  name: 'John Doe',
-  email: 'john.doe@example.com'
+  firstName: user.value?.First_Name,
+  lastName: user.value?.Last_Name,
+  email: user.value?.Email,
 });
 
+// Phone country codes
+const phoneCountries = [
+  { label: 'UK +44', value: '+44' },
+  { label: 'DE +49', value: '+49' },
+  { label: 'VN +84', value: '+84' },
+  { label: 'CN +86', value: '+86' },
+  { label: 'IN +91', value: '+91' },
+  { label: 'PK +92', value: '+92' },
+  { label: 'TW +886', value: '+886' },
+  { label: 'AE +971', value: '+971' },
+];
+
+// Transport types
+const transportTypes = [
+  { label: 'Plane', value: 'plane' },
+  { label: 'Train', value: 'train' },
+  { label: 'Car', value: 'car' },
+];
+
+// Define types
+type TransportType = 'plane' | 'train' | 'car';
+type TransportCostField = 'planeTicketCost' | 'trainTicketCost' | 'gasCost';
+
+interface FormState {
+  iban: string;
+  address: string;
+  phoneCountry: string | null;
+  phone: string;
+  transportType: TransportType;
+  planeTicketCost: number;
+  trainTicketCost: number;
+  gasCost: number;
+  hotelCost: number;
+  extraCosts: Array<{ description: string; amount: number }>;
+}
+
 // Form state
-const form = ref({
+const form = ref<FormState>({
   iban: '',
   address: '',
+  phoneCountry: null,
   phone: '',
-  travelCost: 0,
+  transportType: 'plane',
+  planeTicketCost: 0,
+  trainTicketCost: 0,
+  gasCost: 0,
   hotelCost: 0,
-  extraCosts: [] as { description: string; amount: number }[]
+  extraCosts: []
 });
 
 // Error state
 const errors = ref({
   iban: '',
   address: '',
+  phoneCountry: '',
   phone: '',
-  travelCost: '',
+  planeTicketCost: '',
+  trainTicketCost: '',
+  gasCost: '',
   hotelCost: ''
+});
+
+interface TransportFieldConfig {
+  id: TransportCostField;
+  label: string;
+  model: TransportCostField;
+}
+
+// Dynamic transport cost field based on selected transport type
+const transportCostField = computed<TransportFieldConfig>(() => {
+  switch (form.value.transportType) {
+    case 'plane':
+      return { id: 'planeTicketCost', label: 'Plane Ticket Cost', model: 'planeTicketCost' };
+    case 'train':
+      return { id: 'trainTicketCost', label: 'Train Ticket Cost', model: 'trainTicketCost' };
+    case 'car':
+      return { id: 'gasCost', label: 'Gas Cost', model: 'gasCost' };
+    default:
+      return { id: 'planeTicketCost', label: 'Plane Ticket Cost', model: 'planeTicketCost' };
+  }
 });
 
 // Computed total
 const calculateTotal = computed(() => {
+  const transportCost = form.value[transportCostField.value.model];
   const extraTotal = form.value.extraCosts.reduce((sum, cost) => sum + (Number(cost.amount) || 0), 0);
-  return (Number(form.value.travelCost) || 0) + 
-         (Number(form.value.hotelCost) || 0) + 
+  return Number(transportCost) + 
+         Number(form.value.hotelCost) + 
          extraTotal;
 });
 
@@ -223,6 +333,7 @@ const isFormValid = computed(() => {
   return !Object.values(errors.value).some(error => error) &&
          form.value.iban &&
          form.value.address &&
+         form.value.phoneCountry &&
          form.value.phone;
 });
 
