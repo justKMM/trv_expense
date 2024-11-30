@@ -23,11 +23,31 @@ export const useUser = () => {
     }
   }
 
+  const getUserData = () => {
+    const userDataString = localStorage.getItem('user');
+    if (userDataString) {
+      return JSON.parse(userDataString) as ZohoUser;
+    }
+    return null;
+  };
+
+  const firstName = computed(() => {
+    const userData = getUserData();
+    return userData ? userData.First_Name : '';
+  });
+
+  const lastName = computed(() => {
+    const userData = getUserData();
+    return userData ? userData.Last_Name : '';
+  });
+
   return {
     user,
     isAuthenticated,
     setUser,
     clearUser,
-    fetchUserProfile
+    fetchUserProfile,
+    firstName,
+    lastName
   }
 }

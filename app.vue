@@ -2,7 +2,7 @@
   const router = useRouter();
 
   const nav = [
-    {label: 'Home', to: '/'},
+    {label: 'Dashboard', to: '/'},
     {label: 'About', to: '/about'},
     {label: 'Forms', to: '/forms'}
   ]

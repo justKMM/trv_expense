@@ -2,10 +2,13 @@ import { defineNuxtConfig } from 'nuxt/config'
 
 export default defineNuxtConfig({
   modules: ['nuxt-primevue', 'nuxt-icon', '@pinia/nuxt'],
+  pages: true,
   devtools: { enabled: true },
   // tailwindcss
   css: [
-    '~/assets/css/main.css'
+    '~/assets/css/main.css',
+    'primevue/resources/themes/aura-light-blue/theme.css',
+    'primeicons/primeicons.css'
   ],
   postcss: {
     plugins: {
@@ -17,7 +20,7 @@ export default defineNuxtConfig({
   primevue: {
     usePrimeVue: true,
     options: {
-      unstyled: true
+      ripple: true
     },
     importPT: { as: 'Aura', from: '~/presets/aura' }
   },
@@ -31,5 +34,5 @@ export default defineNuxtConfig({
       // Private runtime config (server-side)
       clientSecret: process.env.NUXT_ZOHO_CLIENT_SECRET
     }
-  }
+  },
 })

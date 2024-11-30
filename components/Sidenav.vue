@@ -6,27 +6,30 @@
   >
     <div class="bg-gray-700 h-[50px] rounded-r-lg">
       <div class="h-full flex text-xl font-bold text-center justify-center text-white">
-        <NuxtLink to="/dashboard">Profile</NuxtLink>
+        <NuxtLink to="/dashboard">Dashboard</NuxtLink>
       </div>
     </div>
     <div class="flex flex-col justify-between h-[calc(100vh-3rem)] bg-gray-900">
       <div class="menu-man text-left px-2 whitespace-nowrap">
         <div class="profile flex flex-col justify-center items-center text-center p-5">
-          <div class="text-center text-white">
-            <h5 class="text-xl font-medium leading-tight mb-2">
-              <!-- {{ currentUser }} -->
-            </h5>
+          <div class="text-center text-white flex flex-col gap-3">
             <NuxtLink
-              to="/forms/travel_expense.vue"
-              class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 mx-3 border-b-4 border-blue-700 hover:border-blue-500 rounded"
+              to="/forms/travel_expense"
+              class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 m-3 border-b-4 border-blue-700 hover:border-blue-500 rounded"
             >
               Travel Expense Form
             </NuxtLink>
             <NuxtLink
               to=""
-              class="block w-full py-2 px-4 rounded-md hover:bg-gray-700 transition duration-200"
+              class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 m-3 border-b-4 border-blue-700 hover:border-blue-500 rounded"
             >
               Account
+            </NuxtLink>
+            <NuxtLink
+              to="/about"
+              class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 m-3 border-b-4 border-blue-700 hover:border-blue-500 rounded"
+            >
+              About
             </NuxtLink>
           </div>
         </div>
