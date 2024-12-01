@@ -348,10 +348,41 @@
           </div>
         </form>
 
-        <div v-else-if="pdfUrl" class="pdf-preview">
-          <!-- Add your PDF preview here -->
-          <iframe :src="pdfUrl" class="w-full h-screen"></iframe>
+        <div v-else-if="pdfUrl" class="pdf-preview space-y-4">
+        <!-- Controls -->
+        <div class="flex justify-between items-center p-4 bg-white shadow">
+          <Button
+            icon="pi pi-arrow-left"
+            label="Back to Form"
+            @click="resetForm()"
+            class="p-button-secondary"
+          />
+          <Button
+            icon="pi pi-download"
+            label="Download PDF"
+            @click="downloadPdf()"
+            class="p-button-primary"
+          />
         </div>
+
+        <!-- PDF Preview -->
+        <div class="pdf-container h-[calc(100vh-120px)] bg-gray-100 p-4">
+          <iframe 
+            :src="pdfUrl" 
+            class="w-full h-full border rounded-lg shadow-lg"
+            type="application/pdf"
+          >
+          </iframe>
+          <p>Your browser doesn't support PDF preview.
+              <a :href="pdfUrl" :download="downloadFileName" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Download PDF</a>
+            </p>
+        </div>
+
+        <!-- Optional: Add a loading state -->
+        <div v-if="loading" class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <ProgressSpinner />
+        </div>
+      </div>
       </template>
     </Card>
   </div>
@@ -368,6 +399,7 @@ import { usePdf } from '~/composables/usePdf';
 import type { TravelExpenseForm } from '~/types/travel_expense_form';
 import { transportTypes } from '~/types/travel_expense_form';
 
+const currentDate = new Date().toLocaleDateString();
 const { user } = useUser();
 const userInfo = ref({
   firstname: user.value?.First_Name,
@@ -530,6 +562,11 @@ const validateAccommodationDates = (checkIn: Date | null, checkOut: Date | null)
   return new Date(checkOut) > new Date(checkIn);
 };
 
+const downloadFileName = computed(() => {
+  const date = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
+  return `${form.value.personal_information.lastname}.travel-expense-report.${currentDate}.pdf`;
+});
+
 // Form submission
 const handleSubmitForm = async () => {
   try {
@@ -552,4 +589,20 @@ const handleSubmitForm = async () => {
     loading.value = false;
   }
 };
+
+const resetForm = () => {
+  isPreview.value = false;
+  // Reset other form states if needed
+};
 </script>
+
+<style scoped>
+.pdf-preview {
+  min-height: 100vh;
+  background-color: rgb(249, 250, 251);
+}
+
+.pdf-container iframe {
+  background-color: white;
+}
+</style>

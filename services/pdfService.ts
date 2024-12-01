@@ -78,8 +78,6 @@ export class PdfService {
   this.doc?.setTextColor(127, 140, 141); // Gray
   const currentDate = new Date().toLocaleDateString();
   this.doc?.text(`Date: ${currentDate}`, 20, 35);
-  const refNumber = `REF-${Date.now().toString().slice(-6)}`;
-  this.doc?.text(`Reference: ${refNumber}`, 20, 42);
 
   // Separator line
   this.doc?.setDrawColor(189, 195, 199); // Light gray
@@ -104,10 +102,10 @@ export class PdfService {
   // addField('Department:', data.department);
   // addField('Request Date:', data.requestDate);
 
-  // Add a new section if needed
+  // Travel expenses section
   yPosition += lineHeight;
   this.doc?.setFont("helvetica", "bold");
-  this.doc?.text('Additional Information', 20, yPosition);
+  this.doc?.text('Travel Expenses', 20, yPosition);
   this.doc?.setFont("helvetica", "normal");
   yPosition += lineHeight;
 
