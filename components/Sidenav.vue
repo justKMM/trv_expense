@@ -1,7 +1,6 @@
 <template>
   <div
-    v-if="sidebarVisibility"
-    class="h-screen w-[300px] bg-gray-800 shadow-lg rounded-r-lg transition-transform duration-300 ease-in-out"
+    class="fixed top-0 left-0 min-h-screen w-[300px] bg-gray-800 shadow-lg rounded-r-lg transition-transform duration-300 ease-in-out z-20"
     :class="{ 'translate-x-0': sidebarVisibility, '-translate-x-full': !sidebarVisibility }"
   >
     <div class="bg-gray-700 h-[50px] rounded-r-lg">
@@ -9,7 +8,7 @@
         <NuxtLink to="/dashboard">Dashboard</NuxtLink>
       </div>
     </div>
-    <div class="flex flex-col justify-between h-[calc(100vh-3rem)] bg-gray-900">
+    <div class="flex flex-col justify-between h-[calc(100vh-50px)] bg-gray-900">
       <div class="menu-man text-left px-2 whitespace-nowrap">
         <div class="profile flex flex-col justify-center items-center text-center p-5">
           <div class="text-center text-white flex flex-col gap-3">

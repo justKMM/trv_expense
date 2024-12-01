@@ -1,7 +1,10 @@
 <template>
-  <div class="w-full h-full flex">
+  <div class="w-full min-h-screen">
     <Sidenav/>
-    <div class="w-full h-full">
+    <div 
+      class="min-h-screen transition-all duration-300 ease-in-out"
+      :class="{ 'ml-[300px]': sidebarVisibility, 'ml-0': !sidebarVisibility }"
+    >
       <Topnav/>
       <div class="m-5">
         <slot />
@@ -10,13 +13,7 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import { sidebarVisibilityChanger } from '~/composables/states';
-
-  const currentUser = "Khai Minh Mai";
-  const sidebarVisibility = sidebarVisibilityChanger();
+const sidebarVisibility = sidebarVisibilityChanger();
 </script>
-
-<style>
-
-</style>
