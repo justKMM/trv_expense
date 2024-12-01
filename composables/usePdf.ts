@@ -25,7 +25,7 @@ export function usePdf() {
         throw new Error('Failed to get PDF URL');
       }
       
-      pdfUrl.value = url;
+      pdfUrl.value = url.startsWith('data:') ? url : `data:application/pdf;base64,${url}`;
       return true;
     } catch (err) {
       error.value = err instanceof Error ? err.message : 'Error generating PDF';

@@ -366,19 +366,27 @@
         </div>
 
         <!-- PDF Preview -->
-        <div class="pdf-container h-[calc(100vh-120px)] bg-gray-100 p-4">
-          <iframe 
-            :src="pdfUrl" 
-            class="w-full h-full border rounded-lg shadow-lg"
+        <div class="pdf-container h-screen bg-gray-100 p-4">
+          <object
+            :data="pdfUrl"
             type="application/pdf"
+            class="w-full h-full border rounded-lg shadow-lg"
           >
-          </iframe>
-          <p>Your browser doesn't support PDF preview.
-              <a :href="pdfUrl" :download="downloadFileName" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Download PDF</a>
-            </p>
+            <!-- PDF can't be displayed -->
+            <div class="flex flex-col items-center justify-center p-4">
+              <p class="mb-2">Unable to display PDF file.</p>
+              <a
+                :href="pdfUrl"
+                :download="downloadFileName"
+                class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+              >
+                Download PDF
+              </a>
+            </div>
+          </object>
         </div>
 
-        <!-- Optional: Add a loading state -->
+        <!-- Loading state -->
         <div v-if="loading" class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <ProgressSpinner />
         </div>
