@@ -5,7 +5,7 @@
         <h2 class="text-xl font-bold text-gray-800 mb-4">Travel Expense Form</h2>
       </template>
       <template #content>
-        <form @submit.prevent="submitForm" novalidate class="space-y-8">
+        <form v-if="!isPreview" @submit.prevent="handleSubmitForm" novalidate class="space-y-8">
           <!-- Personal Information Section -->
           <Panel header="Personal Information">
             <template #header>
@@ -18,7 +18,7 @@
                 <InputGroup>
                   <InputText
                     id="firstName"
-                    v-model="userInfo.firstName"
+                    v-model="userInfo.firstname"
                     disabled
                     class="w-full bg-gray-100"
                     aria-disabled="true"
@@ -32,7 +32,7 @@
                 <InputGroup>
                   <InputText
                     id="lastName"
-                    v-model="userInfo.lastName"
+                    v-model="userInfo.lastname"
                     disabled
                     class="w-full bg-gray-100"
                     aria-disabled="true"
@@ -59,9 +59,10 @@
                 <label class="block text-sm font-medium text-gray-600 mb-2">Phone Number</label>
                 <div class="flex gap-2">
                   <Dropdown
-                    v-model="form.phoneCountry"
+                    v-model="form.personal_information.phone.code"
                     :options="phoneCountries"
                     optionLabel="label"
+                    optionValue="value"
                     placeholder="Code"
                     class="w-30"
                     :class="{ 'p-invalid': errors.phoneCountry }"
@@ -70,7 +71,7 @@
                     <InputText
                       id="phone"
                       v-keyfilter.num
-                      v-model="form.phone"
+                      v-model="form.personal_information.phone.number"
                       class="w-full"
                       :class="{ 'p-invalid': errors.phone }"
                       aria-describedby="phone-help"
@@ -87,7 +88,7 @@
                 <InputGroup>
                   <InputText
                     id="iban"
-                    v-model="form.iban"
+                    v-model="form.personal_information.iban"
                     class="w-full"
                     :class="{ 'p-invalid': errors.iban }"
                     @input="validateIBAN"
@@ -103,7 +104,7 @@
                 <InputGroup>
                   <InputText
                     id="address"
-                    v-model="form.address"
+                    v-model="form.personal_information.address"
                     class="w-full"
                     :class="{ 'p-invalid': errors.address }"
                     aria-describedby="address-help"
@@ -121,7 +122,7 @@
             </template>
             <div class="space-y-6 pt-4">
               <!-- Transport Type and Costs -->
-              <div v-for="(transport, index) in form.transportCosts" :key="index" class="space-y-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <div v-for="(transport, index) in form.form_values.transportCosts" :key="index" class="space-y-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
                 <div class="space-y-2">
                   <label class="block text-sm font-medium text-gray-600">Transport Type</label>
                   <div class="flex gap-6 mt-2">
@@ -201,7 +202,7 @@
               <h3 class="text-lg font-semibold text-gray-700">Accommodation Details</h3>
             </template>
             <div class="space-y-4 pt-4">
-              <div v-for="(accommodation, index) in form.accommodationCosts" :key="index" class="space-y-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <div v-for="(accommodation, index) in form.form_values.accommodationCosts" :key="index" class="space-y-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <!-- Check-in Date -->
                   <div class="space-y-1">
@@ -287,7 +288,7 @@
               <h3 class="text-lg font-semibold text-gray-700">Extra Costs</h3>
             </template>
             <div class="space-y-4 pt-4">
-              <div v-for="(cost, index) in form.extraCosts" :key="index" class="flex gap-4">
+              <div v-for="(cost, index) in form.form_values.extraCosts" :key="index" class="flex gap-4">
                 <InputGroup class="flex-grow">
                   <InputText
                     v-model="cost.description"
@@ -346,22 +347,31 @@
             />
           </div>
         </form>
+
+        <div v-else-if="pdfUrl" class="pdf-preview">
+          <!-- Add your PDF preview here -->
+          <iframe :src="pdfUrl" class="w-full h-screen"></iframe>
+        </div>
       </template>
     </Card>
   </div>
+  
 </template>
 
 <script lang="ts" setup>
-//script lang="ts" setup
-import { ref, computed } from 'vue';
 definePageMeta({
   middleware: ['auth']
 });
 
+import { ref, computed } from 'vue';
+import { usePdf } from '~/composables/usePdf';
+import type { TravelExpenseForm } from '~/types/travel_expense_form';
+import { transportTypes } from '~/types/travel_expense_form';
+
 const { user } = useUser();
 const userInfo = ref({
-  firstName: user.value?.First_Name,
-  lastName: user.value?.Last_Name,
+  firstname: user.value?.First_Name,
+  lastname: user.value?.Last_Name,
   email: user.value?.Email,
 });
 
@@ -377,60 +387,33 @@ const phoneCountries = [
   { label: 'AE +971', value: '+971' },
 ];
 
-// Transport types
-const transportTypes = [
-  { label: 'Plane', value: 'plane' },
-  { label: 'Train', value: 'train' },
-  { label: 'Car', value: 'car' },
-];
-
-// Define types
-type TransportType = 'plane' | 'train' | 'car';
-
-interface TransportCost {
-  type: TransportType | null;
-  date: Date | null;
-  cost: number | null;
-}
-
-interface AccommodationCost {
-  checkIn: Date | null;
-  checkOut: Date | null;
-  cost: number | null;
-}
-
-interface ExtraCost {
-  description: string;
-  amount: number;
-}
-
-interface FormState {
-  iban: string;
-  address: string;
-  phoneCountry: string | null;
-  phone: string;
-  transportCosts: TransportCost[];
-  accommodationCosts: AccommodationCost[];
-  extraCosts: ExtraCost[];
-}
-
 // Form state
-const form = ref<FormState>({
-  iban: '',
-  address: '',
-  phoneCountry: null,
-  phone: '',
-  transportCosts: [{
-    type: 'plane',
-    date: null,
-    cost: null
-  }],
-  accommodationCosts: [{
-    checkIn: null,
-    checkOut: null,
-    cost: null
-  }],
-  extraCosts: []
+const form = ref<TravelExpenseForm>({
+  personal_information: {
+    firstname: userInfo.value?.firstname,
+    lastname: userInfo.value?.lastname,
+    email: userInfo.value?.email,
+    address: '',
+    iban: '',
+    phone: {
+        code: '',
+        number: ''
+    }
+  },
+  form_values: {
+    transportCosts: [{
+      type: 'plane',
+      date: null,
+      cost: null
+    }],
+    accommodationCosts: [{
+      checkIn: null,
+      checkOut: null,
+      cost: null
+    }],
+    extraCosts: [],
+    totalCost: 0
+  }
 });
 
 // Error state
@@ -443,68 +426,30 @@ const errors = ref({
   accommodationCosts: [] as string[]
 });
 
+// For PDF generation
+const { 
+  pdfUrl, 
+  loading, 
+  error, 
+  generatePdf, 
+  downloadPdf,  
+} = usePdf()
+const isPreview = ref(false);
+
 // Computed total
 const calculateTotal = computed(() => {
-  const transportTotal = form.value.transportCosts.reduce((sum, cost) => 
+  const transportTotal = form.value.form_values.transportCosts.reduce((sum, cost) => 
     sum + (cost.cost || 0), 0);
-  const accommodationTotal = form.value.accommodationCosts.reduce((sum, cost) => 
+  const accommodationTotal = form.value.form_values.accommodationCosts.reduce((sum, cost) => 
     sum + (cost.cost || 0), 0);
-  const extraTotal = form.value.extraCosts.reduce((sum, cost) => 
+  const extraTotal = form.value.form_values.extraCosts.reduce((sum, cost) => 
     sum + (cost.amount || 0), 0);
     
   return transportTotal + accommodationTotal + extraTotal;
 });
 
-// Form validation
-const isFormValid = computed(() => {
-  const hasRequiredFields = 
-    form.value.iban &&
-    form.value.address &&
-    form.value.phoneCountry &&
-    form.value.phone;
-
-  const hasNoErrors = !Object.values(errors.value).some(error => 
-    Array.isArray(error) ? error.length > 0 : error
-  );
-
-  const hasValidTransport = form.value.transportCosts.some(cost => 
-    cost.type && cost.date && cost.cost
-  );
-
-  return hasRequiredFields && hasNoErrors && hasValidTransport;
-});
-
-// IBAN validation
-const validateIBAN = () => {
-  const ibanRegex = /^[A-Z]{2}\d{2}[A-Z0-9]{4}\d{7}([A-Z0-9]?){0,16}$/;
-  if (!ibanRegex.test(form.value.iban)) {
-    errors.value.iban = 'Please enter a valid IBAN';
-  } else {
-    errors.value.iban = '';
-  }
-};
-
-// Transport costs management
-const addTransportCost = () => {
-  form.value.transportCosts.push({
-    type: 'plane',
-    date: null,
-    cost: null
-  });
-};
-
-const removeTransportCost = (index: number) => {
-  form.value.transportCosts.splice(index, 1);
-};
-
-// Date validation
-const validateAccommodationDates = (checkIn: Date | null, checkOut: Date | null): boolean => {
-  if (!checkIn || !checkOut) return false; // Disallow empty dates
-  return new Date(checkOut) > new Date(checkIn);
-};
-
 // Watch for date changes and validate
-watch(() => form.value.accommodationCosts, (newCosts) => {
+watch(() => form.value.form_values.accommodationCosts, (newCosts) => {
   newCosts.forEach((cost, index) => {
     if (!validateAccommodationDates(cost.checkIn, cost.checkOut)) {
       errors.value.accommodationCosts[index] = 'Check-out date must be after check-in date';
@@ -514,9 +459,22 @@ watch(() => form.value.accommodationCosts, (newCosts) => {
   });
 }, { deep: true });
 
+// Transport costs management
+const addTransportCost = () => {
+  form.value.form_values.transportCosts.push({
+    type: 'plane',
+    date: null,
+    cost: null
+  });
+};
+
+const removeTransportCost = (index: number) => {
+  form.value.form_values.transportCosts.splice(index, 1);
+};
+
 // Accommodation costs management
 const addAccommodationCost = () => {
-  form.value.accommodationCosts.push({
+  form.value.form_values.accommodationCosts.push({
     checkIn: null,
     checkOut: null,
     cost: null
@@ -524,25 +482,74 @@ const addAccommodationCost = () => {
 };
 
 const removeAccommodationCost = (index: number) => {
-  form.value.accommodationCosts.splice(index, 1);
+  form.value.form_values.accommodationCosts.splice(index, 1);
 };
 
 // Extra costs management
 const addExtraCost = () => {
-  form.value.extraCosts.push({ description: '', amount: 0 });
+  form.value.form_values.extraCosts.push({ description: '', amount: 0 });
 };
 
 const removeExtraCost = (index: number) => {
-  form.value.extraCosts.splice(index, 1);
+  form.value.form_values.extraCosts.splice(index, 1);
+};
+
+// Form validation
+const isFormValid = computed(() => {
+  const hasRequiredFields = 
+    form.value.personal_information.iban &&
+    form.value.personal_information.address &&
+    form.value.personal_information.phone.code &&
+    form.value.personal_information.phone.number;
+
+  const hasNoErrors = !Object.values(errors.value).some(error => 
+    Array.isArray(error) ? error.length > 0 : error
+  );
+
+  return hasRequiredFields;
+});
+
+// IBAN validation
+const validateIBAN = () => {
+  const ibanRegex = /^[A-Z]{2}\d{2}[A-Z0-9]{4}\d{7}([A-Z0-9]?){0,16}$/;
+  if (!ibanRegex.test(form.value.personal_information.iban)) {
+    errors.value.iban = 'Please enter a valid IBAN';
+  } else {
+    errors.value.iban = '';
+  }
+};
+
+// Add immediate validation on field change
+watch(() => form.value.personal_information.iban, (newValue) => {
+  if (newValue) validateIBAN();
+});
+
+// Date validation
+const validateAccommodationDates = (checkIn: Date | null, checkOut: Date | null): boolean => {
+  if (!checkIn || !checkOut) return false; // Disallow empty dates
+  return new Date(checkOut) > new Date(checkIn);
 };
 
 // Form submission
-const submitForm = async () => {
+const handleSubmitForm = async () => {
   try {
-    // Add form submission logic here
-    console.log('Form submitted:', form.value);
+    loading.value = true;
+    const success = await generatePdf(form.value);
+    
+    if (!success) {
+      throw new Error('Failed to generate PDF');
+    }
+    
+    // Only set preview mode if PDF generation was successful
+    isPreview.value = true;
+    console.log('Form submitted successfully');
   } catch (error) {
-    console.error('Error submitting form:', error);
+      console.error('Error submitting form:', error);
+    // Show error to user
+    // You might want to add a ref for error messages
+    // errorMessage.value = error instanceof Error ? error.message : 'Failed to submit form';
+  } finally {
+    loading.value = false;
   }
 };
 </script>

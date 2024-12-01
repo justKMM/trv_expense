@@ -2,6 +2,9 @@ import { defineNuxtConfig } from 'nuxt/config'
 
 export default defineNuxtConfig({
   modules: ['nuxt-primevue', 'nuxt-icon', '@pinia/nuxt'],
+  build: {
+    transpile: ['jspdf'],
+  },
   pages: true,
   devtools: { enabled: true },
   // tailwindcss
