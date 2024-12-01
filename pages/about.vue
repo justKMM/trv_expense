@@ -62,7 +62,7 @@
           <div class="mt-8">
             <h3 class="text-xl font-semibold text-gray-900 mb-4">Connect With Us</h3>
             <a 
-              href="https://www.linkedin.com/company/hrcg" 
+              href="https://www.linkedin.com/company/hoehner-research-&-consulting-group-gmbh-bonn/" 
               target="_blank"
               rel="noopener noreferrer"
               class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
@@ -84,7 +84,7 @@
             Commercial Register: AG Bonn HRB 9226
           </p>
           <p class="text-xs">
-            The content of this page is confidential and intended solely for the addressed recipient. 
+            The content of this page is confidential and intended solely for internal usage. 
             Any form of disclosure, reproduction, distribution, or action taken based on this content 
             by unauthorized persons is prohibited and may be unlawful.
           </p>
