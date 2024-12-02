@@ -30,8 +30,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       // Public runtime config (client-side)
-      clientId: process.env.NUXT_PUBLIC_CLIENT_ID,
-      redirectUri: process.env.NUXT_PUBLIC_REDIRECT_URI
+      clientId: process.env.NUXT_ZOHO_CLIENT_ID,
+      redirectUri: process.env.NUXT_ZOHO_REDIRECT_URI
     },
     private: {
       // Private runtime config (server-side)
