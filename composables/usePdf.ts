@@ -1,16 +1,17 @@
 // composables/usePdf.ts
 import { ref } from 'vue'
-import { PdfService } from '~/services/pdfService'
+import { TravelExpensePdfService } from '~/services/pdfService'
 import type { CustomForm } from '~/types/custom_form'
 import type { PdfOptions } from '~/types/pdf_types'
+import type { TravelExpenseForm } from '~/types/travel_expense_form'
 
 export function usePdf() {
-  const pdfService = new PdfService()
+  let pdfService = new TravelExpensePdfService()
   const pdfUrl = ref<string | null>(null)
   const loading = ref(false)
   const error = ref<string | null>(null)
 
-  const generatePdf = async (data: CustomForm) => {
+  const generatePdf = async (data: TravelExpenseForm) => {
     try {
       loading.value = true;
       error.value = null;
@@ -52,11 +53,19 @@ export function usePdf() {
     }
   };
 
+  const resetPdf = () => {
+    if (pdfService) {
+      pdfService.destroy();
+      pdfService = new TravelExpensePdfService();
+    }
+  }
+
   return {
     pdfUrl,
     loading,
     error,
     generatePdf,
-    downloadPdf
+    downloadPdf,
+    resetPdf
   };
 }

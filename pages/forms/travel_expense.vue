@@ -472,7 +472,8 @@ const {
   loading, 
   error, 
   generatePdf, 
-  downloadPdf,  
+  downloadPdf,
+  resetPdf  
 } = usePdf()
 const isPreview = ref(false);
 
@@ -584,15 +585,12 @@ const handleSubmitForm = async () => {
     if (!success) {
       throw new Error('Failed to generate PDF');
     }
-    
     // Only set preview mode if PDF generation was successful
     isPreview.value = true;
     console.log('Form submitted successfully');
   } catch (error) {
       console.error('Error submitting form:', error);
-    // Show error to user
-    // You might want to add a ref for error messages
-    // errorMessage.value = error instanceof Error ? error.message : 'Failed to submit form';
+      // TODO: Show error to user
   } finally {
     loading.value = false;
   }
@@ -600,7 +598,7 @@ const handleSubmitForm = async () => {
 
 const resetForm = () => {
   isPreview.value = false;
-  // Reset other form states if needed
+  resetPdf();
 };
 </script>
 

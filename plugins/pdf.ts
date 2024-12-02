@@ -1,7 +1,7 @@
-import { PdfService } from "~/services/pdfService"
+import { TravelExpensePdfService } from "~/services/pdfService"
 
 export default defineNuxtPlugin(() => {
-    const pdfService = new PdfService()
+    const pdfService = new TravelExpensePdfService()
     
     return {
       provide: {
